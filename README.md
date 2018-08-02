@@ -11,7 +11,7 @@ As I am just writing the README for the first time, there are no working feature
 SMIDGE will allow you to create input files for both MCNP and Serpent in a consistent graphical interface similar to that of COMSOL. It will provide a graphical interface for specifying input files, and an updated configurable 3d view of the model. It will allow for exporting and importing from both MCNP and Serpent input files. It will attempt to export in a human readable fashion. If exporting after importing, it will try to preserve the structure of the file as much as possible. It will extend the capabilities of lattices and provide scripting capabilities to remove tediousness from creating input files. A new, open, human-readable, file format will be created to allow for smaller file sizes and consistent editing experience.
 
 # Contributing
-Note: I am computer scientist and have no formal education or experience with nuclear engineering. Therefore, the help of professionals who use Serpent or MCNP and have no background in software is greatly appreciated.
+Note: I am computer scientist and have no formal education or experience with nuclear engineering. Therefore, the help of professionals who use Serpent or MCNP is greatly appreciated.
 
 If you have a background in nuclear engineering (or anything you use MCNP and Serpent for) you can:
   - Use this program
