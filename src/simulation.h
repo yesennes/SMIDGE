@@ -1,0 +1,3 @@
+int doTheStuff();
+
+int noDoTheStuff();
