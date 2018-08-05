@@ -1,5 +1,6 @@
 #include <iostream>
 #include "simulation.h"
+#include "material.h"
 using namespace std;
 
 int main()

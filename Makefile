@@ -1,5 +1,5 @@
-objects=build/simulation.o
-CFLAGS=-Wall
+objects=build/simulation.o build/material.o
+CFLAGS=-Wall -Wextra -std=c++11
 
 SMIDGE: $(objects)
 	g++ $(CFLAGS) $(objects) src/main.cpp -o SMIDGE
@@ -13,11 +13,11 @@ run: SMIDGE
 	./SMIDGE
 
 tests: $(objects)
-	g++ $(CFLAGS) -I libs/boost_1_67_0 $(objects) test/tests.cpp -o tests
+	g++ $(CFLAGS) -I libs/boost_1_67_0 -I src $(objects) test/tests.cpp -o tests
 
 .PHONY: runTest
 runTest: tests
 	./tests
 
-$(objects): build/%.o : src/%.cpp
+$(objects): build/%.o : src/%.cpp src/%.h
 	g++ $(CFLAGS) -c $^ -o $@
