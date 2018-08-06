@@ -27,6 +27,6 @@ namespace SMIDGE{
         mat3.setTftTemps(30.5, 40);
         mat3.setVolume(99.9);
         BOOST_REQIRE_EQUAL(mat3.toSerpentCard(), "mat Mats3 -70\n            tft 30.5 40\n"
-                + "            vol 99.9\n101235.09c 1\n  3050.bad 2");
+                + "            vol 99.9\n101235.09c 1\n 3050.bad 2");
     }
 }

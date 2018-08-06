@@ -126,14 +126,14 @@ namespace SMIDGE{
     };
 
     struct Nuclide{
-        Element e;
+        Element element;
         int massNumber;
         std::string libId;
 
-        friend std::ostream& operator<<(std::ostream& os, const Nuclide&);
+        friend std::ostream& operator<<(std::ostream& os, const Nuclide& nuclide);
         //Converts from MCNP and Serpent format
         Nuclide(Element e, int massNumber, std::string libId);
-        Nuclide(const std::string& from);
+        explicit Nuclide(const std::string& from);
     };
 
     class Material : public Card{
@@ -192,8 +192,5 @@ namespace SMIDGE{
 
     };
 
-
-
     std::string const& getName(Element e);
-
 }
