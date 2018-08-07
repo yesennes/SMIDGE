@@ -12,7 +12,7 @@ namespace SMIDGE{
         return os;
     }
 
-    Nuclide::Nuclide(Element e, int massNumber, std::string libId): element(e), massNumber(massNumber), libId(libId){
+    Nuclide::Nuclide(Element e, int massNumber, const std::string& libId): element(e), massNumber(massNumber), libId(libId){
     }
 
     Nuclide::Nuclide(const std::string& from){
@@ -26,68 +26,146 @@ namespace SMIDGE{
         libId = res[3];
     }
 
-    Material::Material(std::string name, std::pair<Nuclide, double> nuclide){
+    Material::Material(const std::string& name, const std::pair<Nuclide, double>& nuclide): name(name){
+        nuclides[0] = nuclide;
     }
 
-    Material::Material(std::string name, std::vector<std::pair<Nuclide, double>>& nuclide){
+    Material::Material(const std::string& name, const std::vector<std::pair<Nuclide, double>>& nuclides): name(name), nuclides(nuclides){
     }
 
-    void Material::setName(std::string name){
+    void Material::setName(const std::string& name){
+        this->name = name;
     }
 
     std::string const& Material::getName() const{
+        return name;
     }
 
     void Material::setDensity(double density){
+        this->density = density;
     }
 
-    double Material::getDensity(){
+    double Material::getDensity() const{
+        return density;
     }
 
     void Material::setAtomicDensity(bool atomicDensity){
+        this->atomicDensity = atomicDensity;
     }
 
-    bool Material::getAtomicDensity(){
+    bool Material::getAtomicDensity() const{
+        return atomicDensity;
     }
 
     void Material::setTemperature(double temp){
+        this->temperature = temp;
     }
 
-    double Material::getTempeture(){
+    double Material::getTempeture() const{
+        return temperature;
     }
 
     void Material::setTftTemps(double min, double max){
+        tftMin = min;
+        tftMax = max;
     }
 
-    double Material::getTftMin(){
+    double Material::getTftMin() const{
+        return tftMin;
     }
 
-    double Material::getTftMax(){
+    double Material::getTftMax() const{
+        return tftMax;
     }
 
     void Material::setColor(int color){
+        this->color = color;
     }
 
     void Material::setColor(int r, int b, int g){
+        this->color = r << 16 | b << 8 | g;
     }
 
-    int Material::getColor(){
+    int Material::getColor() const{
+        return color;
     }
 
     void Material::setVolume(double volume){
+        this->volume = volume;
     }
 
-    double Material::getVolume(){
+    std::string Material::toSerpentCard(){
+        stringstream ret;
+        ret << "mat " << name << " " << density;
+        int indentLen = ret.str().length() + 1;
+        stringstream spaces;
+        for(int i = 0; i < indentLen; i++)
+            spaces << " ";
+        string indent = spaces.str();
+        if(temperature != -1)
+            ret << " " << temperature;
+        if(tftMax != -1 && tftMin != -1)
+            ret << endl << indent << "tft " << tftMin << " " << tftMax;
+        if(color != -1)
+            ret << endl << indent << "rgb " << (color >> 16)
+                << " " << ((color >> 8) & 0xff) << " " << (color & 0xff);
+        if(volume != -1)
+            ret << endl << indent << "vol "  << volume;
+        if(burn)
+            ret << endl << indent << "burn " << 1;
+        return ret.str();
+    }
+
+    std::string Material::toMCNPCard(){
+        //TODO write function
+        return "";
+    }
+
+    void Material::setBurn(bool burn){
+        this->burn = burn;
+    }
+
+    bool Material::getBurn() const{
+        return burn;
+    }
+
+    double Material::getVolume() const{
+        return volume;
     }
 
     std::vector<std::pair<Nuclide, double>>& Material::getNuclides(){
+        return nuclides;
     }
 
-    std::vector<std::pair<Nuclide, double>> const& Material::getNuclides(){
+    std::vector<std::pair<Nuclide, double>> const& Material::getNuclides() const{
+        return nuclides;
     }
 
-    void Material::setNuclides(IteratorT begin, IteratorT end){
+    template<typename IteratorT> void Material::setNuclides(IteratorT begin, IteratorT end){
+        nuclides = vector<pair<Nuclide, double>>(begin, end);
     }
 
     std::string const& getName(Element e){
+        static string elements[] = {
+            "Hydrogen", "Helium", "Lithium", "Beryllium", "Boron", "Carbon", "Nitrogen",
+            "Oxygen", "Fluorine", "Neon", "Sodium", "Magnesium", "Aluminum", "Silicon",
+            "Phosphorus", "Sulfur", "Chlorine", "Argon", "Potassium", "Calcium", "Scandium",
+            "Titanium", "Vanadium", "Chromium", "Manganese", "Iron", "Cobalt", "Nickel",
+            "Copper", "Zinc", "Gallium", "Germanium", "Arsenic", "Selenium", "Bromine",
+            "Krypton", "Rubidium", "Strontium", "Yttrium", "Zirconium", "Niobium", "Molybdenum",
+            "Technetium", "Ruthenium", "Rhodium", "Palladium", "Silver", "Cadmium", "Indium",
+            "Tin", "Antimony", "Tellurium", "Iodine", "Xenon", "Cesium", "Barium", "Lanthanum",
+            "Cerium", "Praseodymium", "Neodymium", "Promethium", "Samarium", "Europium", "Gadolinium",
+            "Terbium", "Dysprosium", "Holmium", "Erbium", "Thulium", "Ytterbium", "Lutetium",
+            "Hafnium", "Tantalum", "Tungsten", "Rhenium", "Osmium", "Iridium", "Platinum",
+            "Gold", "Mercury", "Thallium", "Lead", "Bismuth", "Polonium", "Astatine",
+            "Radon", "Francium", "Radium", "Actinium", "Thorium", "Protactinium", "Uranium",
+            "Neptunium", "Plutonium", "Americium", "Curium", "Berkelium", "Californium", "Einsteinium",
+            "Fermium", "Mendelevium", "Nobelium", "Lawrencium", "Rutherfordium", "Dubnium",
+            "Seaborgium", "Bohrium", "Hassium", "Meitnerium", "Darmstadtium", "Roentgenium",
+            "Copernicium", "Nihonium", "Flerovium", "Moscovium", "Livermorium", "Tennessine",
+            "Oganesson"
+        };
+        return elements[(int)e];
     }
+}

@@ -20,4 +20,4 @@ runTest: tests
 	./tests
 
 $(objects): build/%.o : src/%.cpp src/%.h
-	g++ $(CFLAGS) -c $^ -o $@
+	g++ $(CFLAGS) -c $< -o $@
