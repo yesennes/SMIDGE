@@ -35,9 +35,10 @@ namespace SMIDGE{
 
     class Material : public Card{
         std::string name;
+        //Where not specified, defaults to -1
         //Use -1 to denote sum from nuclide fractions.
         double density;
-        //atomicDensity (10^24/cm^3), otherwise mass density (g/cm^3).
+        //atomic density (10^24/cm^3), otherwise mass density (g/cm^3). Defaults to atomic
         bool atomicDensity;
         //In K, -1 denotes no temperature specified.
         double temperature;
@@ -47,7 +48,7 @@ namespace SMIDGE{
         int color;
         //In cm^3 for 3D, cm^2 for 2D. -1 for none given
         double volume;
-        //Indicates material should be depleted
+        //Indicates material should be depleted. Defaults to false
         bool burn;
         std::vector<std::pair<Nuclide, double>> nuclides;
 

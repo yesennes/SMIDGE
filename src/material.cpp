@@ -5,10 +5,15 @@
 using namespace std;
 namespace SMIDGE{
     std::ostream& operator<<(std::ostream& os, const Nuclide& nuclide){
+        streamsize originalWidth = os.width();
+        char originalFill = os.fill();
         os.width(2);
-        os << (int)(nuclide.element);
+        os << (int)(nuclide.element) + 1;
         os.width(3);
+        os.fill('0');
         os << nuclide.massNumber << '.' << nuclide.libId;
+        os.width(originalWidth);
+        os.fill(originalFill);
         return os;
     }
 
@@ -26,11 +31,14 @@ namespace SMIDGE{
         libId = res[3];
     }
 
-    Material::Material(const std::string& name, const std::pair<Nuclide, double>& nuclide): name(name){
-        nuclides[0] = nuclide;
+    Material::Material(const std::string& name, const std::pair<Nuclide, double>& nuclide):
+        name(name), density(-1), atomicDensity(true), temperature(-1), tftMin(-1), tftMax(-1), color(-1), volume(-1), burn(false){
+        nuclides.push_back(nuclide);
     }
 
-    Material::Material(const std::string& name, const std::vector<std::pair<Nuclide, double>>& nuclides): name(name), nuclides(nuclides){
+    Material::Material(const std::string& name, const std::vector<std::pair<Nuclide, double>>& nuclides)
+        : name(name), density(-1), atomicDensity(true), temperature(-1), tftMin(-1),
+        tftMax(-1), color(-1), volume(-1), burn(false), nuclides(nuclides){
     }
 
     void Material::setName(const std::string& name){
@@ -96,14 +104,20 @@ namespace SMIDGE{
 
     std::string Material::toSerpentCard(){
         stringstream ret;
-        ret << "mat " << name << " " << density;
+        ret << "mat " << name << " ";
+        if(density != -1){
+            if(!atomicDensity)
+                ret << "-";
+            ret << density;
+        } else
+            ret << "sum";
         int indentLen = ret.str().length() + 1;
         stringstream spaces;
         for(int i = 0; i < indentLen; i++)
             spaces << " ";
         string indent = spaces.str();
         if(temperature != -1)
-            ret << " " << temperature;
+            ret << " temp " << temperature;
         if(tftMax != -1 && tftMin != -1)
             ret << endl << indent << "tft " << tftMin << " " << tftMax;
         if(color != -1)
@@ -113,6 +127,9 @@ namespace SMIDGE{
             ret << endl << indent << "vol "  << volume;
         if(burn)
             ret << endl << indent << "burn " << 1;
+        for(pair<Nuclide, double>& nuclide : nuclides){
+            ret << endl << nuclide.first << " " << nuclide.second;
+        }
         return ret.str();
     }
 
