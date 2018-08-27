@@ -102,7 +102,7 @@ namespace SMIDGE{
         this->volume = volume;
     }
 
-    std::string Material::toSerpentCard(){
+    std::string Material::toSerpentCard() const{
         stringstream ret;
         ret << "mat " << name << " ";
         if(density != -1){
@@ -127,13 +127,13 @@ namespace SMIDGE{
             ret << endl << indent << "vol "  << volume;
         if(burn)
             ret << endl << indent << "burn " << 1;
-        for(pair<Nuclide, double>& nuclide : nuclides){
+        for(const pair<Nuclide, double>& nuclide : nuclides){
             ret << endl << nuclide.first << " " << nuclide.second;
         }
         return ret.str();
     }
 
-    std::string Material::toMCNPCard(){
+    std::string Material::toMCNPCard() const{
         //TODO write function
         return "";
     }

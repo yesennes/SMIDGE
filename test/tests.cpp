@@ -1,6 +1,7 @@
 #define BOOST_TEST_MODULE My Test
 #include <boost/test/included/unit_test.hpp>
 #include "material.h"
+#include "plane.h"
 #include <iostream>
 
 using namespace std;
@@ -32,5 +33,16 @@ namespace SMIDGE{
         mat3.setTftTemps(30.5, 40);
         mat3.setVolume(99.9);
         BOOST_CHECK_EQUAL(mat3.toSerpentCard(), "mat Mats3 -70\n              tft 30.5 40\n              vol 99.9\n101235.09c 1\n 3050.bad 2");
+    }
+
+    BOOST_AUTO_TEST_CASE(planeTest) {
+        AxisPlane aPlane("axis", Axis::Y, 5.6);
+        BOOST_CHECK_EQUAL(aPlane.toSerpentCard(), "surf axis py 5.6");
+
+        VectorPlane vPlane("vector", 2, 5.6, 7, -3);
+        BOOST_CHECK_EQUAL(vPlane.toSerpentCard(), "surf vector plane 2 5.6 7 -3");
+
+        PointsPlane pPlane("points", point(3, 5, 7), point(-2, 3.5, 9), point(1, -8, 8));
+        BOOST_CHECK_EQUAL(pPlane.toSerpentCard(), "surf points plane 3 5 7 -2 3.5 9 1 -8 8");
     }
 }

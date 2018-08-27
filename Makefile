@@ -1,8 +1,8 @@
-objects=build/simulation.o build/material.o
+objects=build/simulation.o build/material.o build/surface.o build/plane.o
 CFLAGS=-Wall -Wextra -std=c++11 -g
 
 SMIDGE: $(objects) build/main.o
-	g++ $(CFLAGS) $(objects) $^ -o SMIDGE
+	g++ $(CFLAGS) $^ -o SMIDGE
 
 .PHONY: clean
 clean:
@@ -15,7 +15,7 @@ run: SMIDGE
 tests: $(objects) build/tests.o
 	g++ $(CFLAGS) $^ -o tests
 
-.PHONY: runTest
+.PHONY: runTests
 runTests: tests
 	./tests
 

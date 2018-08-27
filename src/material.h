@@ -89,8 +89,8 @@ namespace SMIDGE{
         const std::vector<std::pair<Nuclide, double>>& getNuclides() const;
         template<typename IteratorT> void setNuclides(IteratorT begin, IteratorT end);
 
-        virtual std::string toSerpentCard();
-        virtual std::string toMCNPCard();
+        virtual std::string toSerpentCard() const;
+        virtual std::string toMCNPCard() const;
     };
 
     std::string const& getName(Element e);
